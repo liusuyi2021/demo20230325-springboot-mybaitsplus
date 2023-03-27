@@ -94,6 +94,7 @@ public class StudentController {
         idList.add(1);
         idList.add(2);
         idList.add(3);
+        log.info(idList.toString());
         return studentMapper.selectBatchIds(idList);
     }
     @GetMapping(value = "/selectAllByWrapper1")
