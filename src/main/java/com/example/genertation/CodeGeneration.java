@@ -2,6 +2,7 @@ package com.example.genertation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.querys.PostgreSqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
@@ -18,7 +19,7 @@ import java.util.Collections;
 public class CodeGeneration {
     public static void main(String[] args) {
         /**
-         * 先配置数据源
+         * 配置postgresql数据源
          */
         PostgreSqlQuery postgreSqlQuery = new PostgreSqlQuery() {
             @Override
@@ -26,11 +27,22 @@ public class CodeGeneration {
                 return new String[]{"Default"};
             }
         };
+        DataSourceConfig postgresqlDsc = new DataSourceConfig.Builder("jdbc:postgresql://112.98.126.2:5432/postgres","postgres","postgres")
+        .dbQuery(postgreSqlQuery).build();
+        /**
+         * 配置mysql数据源
+         */
+        MySqlQuery mySqlQuery=new MySqlQuery(){
+            @Override
+            public String[] fieldCustom() {
+                return new String[]{"Default"};
+            }
+        };
+        DataSourceConfig mysqlDsc = new DataSourceConfig.Builder("jdbc:mysql://112.98.126.2:33306/ard732","root","admin12345")
+          .dbQuery(mySqlQuery).build();
 
-        DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:postgresql://localhost:5432/postgres","postgres","postgres")
-                .dbQuery(postgreSqlQuery).build();
         //通过datasourceConfig创建AutoGenerator
-        AutoGenerator generator = new AutoGenerator(dsc);
+        AutoGenerator generator = new AutoGenerator(mysqlDsc);
 
         /**
          * 全局配置
@@ -67,7 +79,7 @@ public class CodeGeneration {
         StrategyConfig strategyConfig = new StrategyConfig.Builder()
                 .enableCapitalMode()//开启全局大写命名
                 //.likeTable()模糊表匹配
-                .addInclude("student")//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
+                .addInclude("ard_nvr")//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
                 //.disableSqlFilter()禁用sql过滤:默认(不使用该方法）true
                 //.enableSchema()启用schema:默认false
 
